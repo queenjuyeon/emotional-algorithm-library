@@ -15,7 +15,7 @@
       background: black; background-size: cover;
       height: 100%;
     }
-    h1, h2 { font-size: 2.4rem; font-weight: 600; color: white; }
+    h1, h2 { font-size: 3rem; font-weight: 600; color: white; }
     .title { text-align: center; margin-bottom: 20px; }
     #formWrapper {
       background: rgba(0, 0, 0, 0.2);
@@ -89,12 +89,28 @@
       const formInputs = $('input[type="text"]');
       formInputs.focus(function() {
         $(this).siblings('.formLabel').addClass('formTop');
-      });
-      formInputs.blur(function() {
-        if ($.trim($(this).val()) === '') {
-          $(this).siblings('.formLabel').removeClass('formTop');
-        }
-      });
+        $(this).addClass('filled');
+        });
+
+        // 입력 중—한 글자라도 들어오면 filled, 없으면 해제
+      formInputs.on('input', function() {
+         if ($.trim($(this).val()) !== '') {
+         $(this).addClass('filled');
+          } else {
+             $(this).removeClass('filled');
+         }
+        });
+      
+      // 블러 시—값이 비어 있으면 라벨·filled 해제, 
+      // 한 글자라도 있으면 filled 유지 (라벨은 formTop 유지)
+      formInputs.on('blur', function() {
+      if ($.trim($(this).val()) === '') {
+      $(this).siblings('.formLabel').removeClass('formTop');
+      $(this).removeClass('filled');
+    }
+    // else { /* 아무것도 안 해도 filled 클래스는 남아있습니다 */ }
+  });
+
       $('.formLabel').click(function() {
         $(this).siblings('.form-style').focus();
       });
